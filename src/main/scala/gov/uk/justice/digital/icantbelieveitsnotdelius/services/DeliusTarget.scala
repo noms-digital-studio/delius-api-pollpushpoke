@@ -5,6 +5,7 @@ import java.util.Base64
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpHeader.ParsingResult
+import akka.http.scaladsl.model.HttpHeader.ParsingResult.Error
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
@@ -28,18 +29,31 @@ class DeliusTarget @Inject()(@Named("targetUrl") targetUrl: String,
 
   def asHttpHeaders(headers: Map[String, String]): List[HttpHeader] =
 
-  // exclude content-type as akka http bitches
-    headers.filterKeys(key => !key.equalsIgnoreCase("content-type")).map { case (k, v) => HttpHeader.parse(k, v) match {
-      case valid: ParsingResult.Ok => valid.header
+  // exclude content-type as akka http rejects explicit setting of content type header in this way
+    headers.filterKeys(key => !key.equalsIgnoreCase("content-type")).flatMap { case (k, v) => HttpHeader.parse(k, v) match {
+      case valid: ParsingResult.Ok => Seq(valid.header)
+      case error: Error => {
+        logger.warn(s"${error.error}. Couldn't parse header $k : $v")
+        Seq()
+      }
     }
     }.toList
 
-  def contentTypeOf(headers: Map[String, String]): ContentType = headers.filterKeys(k => k.equalsIgnoreCase("content-type")).map {
-    case (_, v) => ContentType.parse(v)
-  }.head match {
-    case Right(x) => x
-    case Left(x) => ContentTypes.`text/plain(UTF-8)`
-  }
+  def contentTypeOf(headers: Map[String, String]) =
+    headers.filterKeys(k => k.equalsIgnoreCase("content-type"))
+      .map { case (_, v) => Some(ContentType.parse(v)) }
+      .headOption.getOrElse(None)
+      .map {
+        case Right(x) => x
+        case Left(x) => {
+          logger.warn(s"Couldn't parse content-type: $x, defaulting to 'text/plain(UTF-8)'")
+          ContentTypes.`text/plain(UTF-8)`
+        }
+      }.getOrElse(
+      {
+        logger.warn("No content type found, defaulting to 'text/plain(UTF-8)'")
+        ContentTypes.`text/plain(UTF-8)`
+      })
 
 
   override def push(job: Job) = {
