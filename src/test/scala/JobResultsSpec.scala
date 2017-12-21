@@ -4,8 +4,8 @@ import akka.stream.ActorMaterializer
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
-import gov.uk.justice.digital.icantbelieveitsnotdelius.data.{DeliusPushResult, Job, SchedulerData, SchedulerPullResult}
-import gov.uk.justice.digital.icantbelieveitsnotdelius.services.{JobResultTarget, JobSource}
+import gov.uk.justice.digital.icantbelieveitsnotdelius.data.{DeliusPushResult, Job}
+import gov.uk.justice.digital.icantbelieveitsnotdelius.services.JobResultTarget
 import org.json4s.NoTypeHints
 import org.json4s.native.Serialization
 import org.scalatest.{BeforeAndAfterAll, FunSpec, GivenWhenThen, Matchers}

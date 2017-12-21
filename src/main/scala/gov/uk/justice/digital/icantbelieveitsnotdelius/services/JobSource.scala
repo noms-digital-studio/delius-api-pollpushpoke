@@ -7,7 +7,7 @@ import akka.http.scaladsl.unmarshalling.{Unmarshal, Unmarshaller}
 import akka.stream.ActorMaterializer
 import com.google.inject.Inject
 import com.google.inject.name.Named
-import gov.uk.justice.digital.icantbelieveitsnotdelius.data.{Job, SchedulerPullResult, SchedulerPushRequest}
+import gov.uk.justice.digital.icantbelieveitsnotdelius.data.{Job, SchedulerPullResult}
 import gov.uk.justice.digital.icantbelieveitsnotdelius.traits.SingleSource
 import grizzled.slf4j.Logging
 import org.json4s.Formats
