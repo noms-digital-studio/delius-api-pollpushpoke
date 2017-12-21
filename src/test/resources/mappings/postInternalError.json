@@ -1,0 +1,10 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/job/666"
+  },
+  "response": {
+    "status": 500,
+    "fixedDelayMilliseconds": 1000
+  }
+}

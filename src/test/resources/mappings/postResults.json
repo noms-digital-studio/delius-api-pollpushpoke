@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPattern": "/job/5582cb83-ebd4-4e90-8b8d-f65eae81d79a"
+  },
+  "response": {
+    "status": 202,
+    "delayDistribution": {
+      "type": "uniform",
+      "lower": 1000,
+      "upper": 3000
+    }
+  }
+}

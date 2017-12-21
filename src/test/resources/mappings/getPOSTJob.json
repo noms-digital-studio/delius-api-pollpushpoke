@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/job"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "reqId": "5582cb83-ebd4-4e90-8b8d-f65eae81d79a",
+      "url": "/hello",
+      "method": "POST",
+      "body": "eyJhIjoiYiJ9",
+      "headers": {
+        "content-type" : "application/json",
+        "host": "delius-api-job-schedular-dev.tqek38d8jq.eu-west-2.elasticbeanstalk.com",
+        "x-real-ip": "172.31.29.70",
+        "x-forwarded-for": "82.22.2.33, 172.31.29.70",
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+        "cache-control": "max-age=0",
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
+        "x-forwarded-port": "80",
+        "x-forwarded-proto": "http"
+      }
+    },
+    "fixedDelayMilliseconds": 2000
+  }
+}
