@@ -3,17 +3,16 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.stream.ActorMaterializer
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import gov.uk.justice.digital.icantbelieveitsnotdelius.data.{Job, SchedulerPullResult}
 import gov.uk.justice.digital.icantbelieveitsnotdelius.services.JobSource
 import org.json4s.NoTypeHints
 import org.json4s.native.Serialization
-import org.scalatest.{BeforeAndAfterAll, FunSpec, GivenWhenThen, Matchers}
+import org.scalatest._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class JobSourceSpec extends FunSpec with BeforeAndAfterAll with GivenWhenThen with Matchers {
+class JobSourceSpec extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with GivenWhenThen with Matchers {
 
   implicit val formats = Serialization.formats(NoTypeHints)
   implicit val system = ActorSystem()
@@ -23,14 +22,9 @@ class JobSourceSpec extends FunSpec with BeforeAndAfterAll with GivenWhenThen wi
 
     it("GETs job from the API") {
 
-      val testPort = 8093
-
-      configureFor(testPort)
-      val api = new WireMockServer(options.port(testPort))
-      val source = new JobSource(s"http://localhost:$testPort/job")
+      val source = new JobSource(s"http://localhost:$port/job")
 
       Given("the source API")
-      api.start()
 
       When("Jobs are pulled from the API")
       val result = Await.result(source.pull(), 5.seconds)
@@ -58,33 +52,37 @@ class JobSourceSpec extends FunSpec with BeforeAndAfterAll with GivenWhenThen wi
 
       result shouldBe expected
 
-      api.stop()
     }
 
 
     it("reports a failure HTTP response code as an error") {
 
-      val testPort = 8094
-
-      configureFor(testPort)
-      val api = new WireMockServer(options.port(testPort))
-      val source = new JobSource(s"http://localhost:$testPort/internalError")
+      val source = new JobSource(s"http://localhost:$port/internalError")
 
       Given("the source API returns an 500 Internal Error")
-      api.start()
 
       When("a Job pull from the API is attempted")
       val result = Await.result(source.pull(), 5.seconds)
 
       Then("the 500 error is reported")
       result.error.get.toString should include("500")
-
-      api.stop()
     }
   }
 
-  override def afterAll() {
+  val port = 8093
+  private var mockedRestAPIs: Option[WireMockServer] = None
 
+  before {
+    mockedRestAPIs = Some(new WireMockServer(port))
+    configureFor(port)
+    mockedRestAPIs.get.start()
+  }
+
+  after {
+    mockedRestAPIs.get.stop()
+  }
+
+  override protected def afterAll(): Unit = {
     system.terminate()
   }
 }
