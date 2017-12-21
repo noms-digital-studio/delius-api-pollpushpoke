@@ -23,7 +23,7 @@ class JobResultsSpec extends FunSpec with BeforeAndAfterAll with GivenWhenThen w
 
     it("POSTs job result to the API") {
 
-      val testPort = 8086
+      val testPort = 8092
 
       configureFor(testPort)
       val api = new WireMockServer(options.port(testPort))

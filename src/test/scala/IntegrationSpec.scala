@@ -33,7 +33,7 @@ class IntegrationSpec extends FunSpec with BeforeAndAfter with GivenWhenThen wit
   private var mockedRestAPIs: Option[WireMockServer] = None
   private var runningService: Option[ActorSystem] = None
 
-  private val port = 8099
+  private val port = 8091
 
   before {
     mockedRestAPIs = Some(new WireMockServer(port))

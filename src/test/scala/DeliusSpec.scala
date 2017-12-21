@@ -99,7 +99,7 @@ class DeliusSpec extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with
     }
   }
 
-  val port = 8081
+  val port = 8090
   private var mockedRestAPIs: Option[WireMockServer] = None
 
   before {
@@ -110,7 +110,6 @@ class DeliusSpec extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with
 
   after {
     mockedRestAPIs.get.stop()
-    //    system.terminate()
   }
 
   override protected def afterAll(): Unit = {

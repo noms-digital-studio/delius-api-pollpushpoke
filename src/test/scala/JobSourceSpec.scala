@@ -23,7 +23,7 @@ class JobSourceSpec extends FunSpec with BeforeAndAfterAll with GivenWhenThen wi
 
     it("GETs job from the API") {
 
-      val testPort = 8082
+      val testPort = 8093
 
       configureFor(testPort)
       val api = new WireMockServer(options.port(testPort))
@@ -64,7 +64,7 @@ class JobSourceSpec extends FunSpec with BeforeAndAfterAll with GivenWhenThen wi
 
     it("reports a failure HTTP response code as an error") {
 
-      val testPort = 8085
+      val testPort = 8094
 
       configureFor(testPort)
       val api = new WireMockServer(options.port(testPort))
